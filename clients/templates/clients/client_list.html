@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block title %}Portefeuille Clients | Judicia Luxe{% endblock %}
+
+{% block extra_css %}
+    .page-header {
+        padding: 5rem 0 3rem;
+        background: var(--secondary);
+    }
+
+    .page-header h1 {
+        font-size: 3rem;
+        color: var(--accent);
+        text-align: center;
+    }
+
+    .client-table-container {
+        margin-top: 5rem;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 4px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        color: var(--text-light);
+    }
+
+    th {
+        text-align: left;
+        padding: 1.5rem 2rem;
+        background: rgba(212, 175, 55, 0.1);
+        color: var(--accent);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        border-bottom: 2px solid var(--accent);
+    }
+
+    td {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--glass-border);
+        font-weight: 300;
+        font-size: 0.95rem;
+    }
+
+    tr:hover {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .client-initials {
+        width: 40px;
+        height: 40px;
+        background: var(--accent);
+        color: var(--primary);
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 15px;
+    }
+
+    .client-badge-active {
+        background: rgba(0, 255, 0, 0.1);
+        color: #00FF00;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+    }
+{% endblock %}
+
+{% block content %}
+    <header class="page-header">
+        <div class="container animate-fade">
+            <h1>Notre Portefeuille de Confiance</h1>
+            <p style="text-align: center; max-width: 600px; margin: 1rem auto; color: var(--text-muted);">
+                La confidentialité est au cœur de notre engagement. Liste restreinte de nos clients engagés dans nos domaines d'expertise.
+            </p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="client-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Identité du Client</th>
+                        <th>Coordonnées</th>
+                        <th>Adresse Établie</th>
+                        <th>Statut Dossier</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td style="display: flex; align-items: center;">
+                                <div class="client-initials">{{ client.first_name|first }}{{ client.last_name|first }}</div>
+                                <div>
+                                    <div style="font-weight: 600; color: var(--accent);">{{ client.first_name }} {{ client.last_name }}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">ID: #CL{{ client.id }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                <div>{{ client.email }}</div>
+                                <div style="font-size: 0.8rem; color: var(--text-muted);">{{ client.phone }}</div>
+                            </td>
+                            <td>{{ client.address }}</td>
+                            <td><span class="client-badge-active">EN COURS</span></td>
+                            <td>
+                                <a href="#" style="color: var(--accent);"><i class="fas fa-eye"></i></a>
+                                <a href="#" style="color: var(--text-muted); margin-left: 15px;"><i class="fas fa-edit"></i></a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; padding: 4rem; color: var(--text-muted);">Aucun client n'est actuellement référencé dans notre base de données sécurisée.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
