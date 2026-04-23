@@ -1,0 +1,25 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Confirmer la suppression | Judicia Luxe{% endblock %}
+
+{% block content %}
+<div class="container animate-fade" style="padding: 15rem 0; text-align: center;">
+    <div class="glass-card" style="padding: 4rem; max-width: 600px; margin: 0 auto; border-color: #ff4d4d;">
+        <i class="fas fa-exclamation-triangle fa-3x" style="color: #ff4d4d; margin-bottom: 2rem;"></i>
+        <h1 style="margin-bottom: 2rem;">Retirer du panier ?</h1>
+        <p class="text-muted" style="margin-bottom: 3rem;">
+            Voulez-vous vraiment retirer l'expertise <strong>"{{ object.service.name }}"</strong> de votre panier ?
+        </p>
+        
+        <form method="POST" style="display: flex; gap: 2rem; justify-content: center;">
+            {% csrf_token %}
+            <button type="submit" class="cta-btn" style="background: #ff4d4d; border-color: #ff4d4d;">
+                Confirmer le retrait
+            </button>
+            <a href="{% url 'cart_detail' %}" class="cta-btn" style="background: transparent; color: var(--text-light);">
+                Annuler
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

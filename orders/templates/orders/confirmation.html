@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Commande Confirmée | Judicia Luxe{% endblock %}
+
+{% block content %}
+<div class="container animate-fade" style="padding: 15rem 0; text-align: center;">
+    <div class="glass-card" style="padding: 5rem; max-width: 700px; margin: 0 auto; border-color: var(--accent);">
+        <i class="fas fa-check-circle fa-5x" style="color: var(--accent); margin-bottom: 3rem;"></i>
+        <h1 style="font-size: 3rem; margin-bottom: 2rem;">Merci pour votre confiance</h1>
+        <p class="text-muted" style="font-size: 1.2rem; margin-bottom: 4rem;">
+            Votre demande d'expertise a été enregistrée avec succès. <br>
+            Référence de commande : <strong>#{{ order.id }}</strong>
+        </p>
+        
+        <div style="text-align: left; background: rgba(0,0,0,0.2); padding: 3rem; border-radius: 8px; margin-bottom: 4rem;">
+            <h3 style="margin-bottom: 2rem; color: var(--accent);">Détails de facturation</h3>
+            <p><strong>Client :</strong> {{ order.first_name }} {{ order.last_name }}</p>
+            <p><strong>Adresse :</strong> {{ order.address }}, {{ order.postal_code }} {{ order.city }}</p>
+            <p><strong>Email :</strong> {{ order.email }}</p>
+            <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 2rem 0;">
+            <p style="font-size: 1.3rem; margin: 0;"><strong>Total :</strong> {{ order.get_total_cost }} €</p>
+        </div>
+        
+        <a href="{% url 'home' %}" class="cta-btn">Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}

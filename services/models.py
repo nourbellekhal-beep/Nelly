@@ -16,6 +16,7 @@ class Service(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='services')
     image = models.ImageField(upload_to='services/', blank=True, null=True)
+    stock = models.IntegerField(default=10)
 
     def __str__(self):
         return self.name

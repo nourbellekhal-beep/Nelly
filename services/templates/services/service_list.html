@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 
 {% block title %}Expertises Juridiques | Judicia Luxe{% endblock %}
 
@@ -132,7 +132,7 @@
                     </div>
                     <div>
                         <div class="price">{{ service.price }} € <small>/ dossier</small></div>
-                        <a href="#" class="cta-btn" style="width: 100%; text-align: center; border: none; font-size: 0.9rem;">Consulter</a>
+                        <a href="{% url 'service_detail' service.pk %}" class="cta-btn" style="width: 100%; text-align: center; border: none; font-size: 0.9rem;">Consulter</a>
                     </div>
                 </div>
             {% empty %}

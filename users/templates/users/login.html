@@ -1,0 +1,22 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Connexion | Judicia Luxe{% endblock %}
+
+{% block content %}
+<div class="container animate-fade" style="padding: 10rem 0;">
+    <div class="glass-card" style="max-width: 500px; margin: 0 auto; padding: 4rem;">
+        <h1 style="text-align: center; margin-bottom: 3rem; color: var(--accent);">Accès Client Luxe</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="cta-btn" style="width: 100%; margin-top: 2rem; border: none;">
+                Se connecter
+            </button>
+        </form>
+        <p style="text-align: center; margin-top: 2rem; color: var(--text-muted);">
+            Nouveau chez nous ? <a href="{% url 'signup' %}" style="color: var(--accent);">S'inscrire</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

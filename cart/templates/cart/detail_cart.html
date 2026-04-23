@@ -1,0 +1,207 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Votre Panier | Judicia Luxe{% endblock %}
+
+{% block extra_css %}
+    .cart-container {
+        padding: 10rem 0 5rem;
+    }
+
+    .cart-title {
+        font-size: 3rem;
+        margin-bottom: 4rem;
+        text-align: center;
+        color: var(--accent);
+    }
+
+    .cart-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    .cart-table th {
+        text-align: left;
+        padding: 1rem 2rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
+    }
+
+    .cart-row {
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+    }
+
+    .cart-row td {
+        padding: 2rem;
+        vertical-align: middle;
+    }
+
+    .cart-item-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .cart-item-image {
+        width: 80px;
+        height: 80px;
+        background: var(--secondary);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cart-item-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .quantity-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .quantity-input {
+        width: 60px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid var(--glass-border);
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .update-btn {
+        background: transparent;
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.3s ease;
+    }
+
+    .update-btn:hover {
+        background: var(--accent);
+        color: var(--secondary);
+    }
+
+    .delete-link {
+        color: #ff4d4d;
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+
+    .cart-summary {
+        margin-top: 4rem;
+        padding: 3rem;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        max-width: 400px;
+        margin-left: auto;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    .total-row {
+        border-top: 1px solid var(--glass-border);
+        padding-top: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--accent);
+    }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-top: 2rem;
+    }
+{% endblock %}
+
+{% block content %}
+<div class="container cart-container animate-fade">
+    <h1 class="cart-title">Votre Panier d'Expertises</h1>
+
+    {% if cart.items.all %}
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Expertise</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart.items.all %}
+                <tr class="cart-row">
+                    <td>
+                        <div class="cart-item-info">
+                            <div class="cart-item-image">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div>
+                                <div class="cart-item-name">{{ item.service.name }}</div>
+                                <div class="text-muted small">{{ item.service.price }} € / unité</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form action="{% url 'cart_item_update' item.pk %}" method="POST" class="quantity-form">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.service.stock }}" class="quantity-input">
+                            <button type="submit" class="update-btn">Mettre à jour</button>
+                        </form>
+                    </td>
+                    <td>
+                        <strong>{{ item.total_price }} €</strong>
+                    </td>
+                    <td>
+                        <a href="{% url 'cart_item_delete' item.pk %}" class="delete-link">
+                            <i class="fas fa-trash"></i> Retirer
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="summary-row">
+                <span>Sous-total</span>
+                <span>{{ cart.total_price }} €</span>
+            </div>
+            <div class="summary-row">
+                <span>Honoraires de gestion</span>
+                <span>0 €</span>
+            </div>
+            <div class="summary-row total-row">
+                <span>Total Estimé</span>
+                <span>{{ cart.total_price }} €</span>
+            </div>
+            <a href="{% url 'order_create' %}" class="cta-btn checkout-btn">Procéder à la commande</a>
+        </div>
+    {% else %}
+        <div class="glass-card" style="text-align: center; padding: 5rem;">
+            <i class="fas fa-shopping-cart fa-4x" style="margin-bottom: 2rem; opacity: 0.2;"></i>
+            <h2>Votre panier est actuellement vide.</h2>
+            <p class="text-muted" style="margin-bottom: 3rem;">Nos experts sont à votre disposition pour vous accompagner.</p>
+            <a href="{% url 'service_list' %}" class="cta-btn">Découvrir nos services</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

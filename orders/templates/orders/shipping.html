@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Validation de commande | Judicia Luxe{% endblock %}
+
+{% block extra_css %}
+    .checkout-container {
+        padding: 10rem 0 5rem;
+    }
+
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 4rem;
+    }
+
+    .summary-card {
+        background: var(--glass);
+        padding: 3rem;
+        border: 1px solid var(--glass-border);
+        border-radius: 8px;
+        position: sticky;
+        top: 10rem;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .summary-total {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--glass-border);
+        font-size: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        color: var(--accent);
+    }
+{% endblock %}
+
+{% block content %}
+<div class="container checkout-container animate-fade">
+    <h1 style="font-size: 3rem; margin-bottom: 4rem; color: var(--accent);">Finalisez votre demande</h1>
+    
+    <div class="checkout-grid">
+        <div class="glass-card" style="padding: 4rem;">
+            <h2 style="margin-bottom: 3rem;">Informations de Facturation</h2>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">{{ form.first_name|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.last_name|as_crispy_field }}</div>
+                </div>
+                {{ form.email|as_crispy_field }}
+                {{ form.address|as_crispy_field }}
+                <div class="row">
+                    <div class="col-md-6">{{ form.postal_code|as_crispy_field }}</div>
+                    <div class="col-md-6">{{ form.city|as_crispy_field }}</div>
+                </div>
+                
+                <button type="submit" class="cta-btn" style="width: 100%; margin-top: 3rem; border: none;">
+                    Valider et Commander
+                </button>
+            </form>
+        </div>
+        
+        <div>
+            <div class="summary-card">
+                <h3 style="margin-bottom: 2rem;">Résumé de la commande</h3>
+                {% for item in cart.items.all %}
+                <div class="summary-item">
+                    <span>{{ item.quantity }} x {{ item.service.name }}</span>
+                    <span>{{ item.total_price }} €</span>
+                </div>
+                {% endfor %}
+                
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>{{ cart.total_price }} €</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
